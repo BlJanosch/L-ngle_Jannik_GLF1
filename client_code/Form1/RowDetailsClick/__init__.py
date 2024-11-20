@@ -14,9 +14,18 @@ class RowDetailsClick(RowDetailsClickTemplate):
     # Any code you write here will run before the form opens.
 
   def Details_click(self, **event_args):
-    """This method is called when the button is clicked"""
-    # get Form1
     parent = self.parent.parent.parent.parent
     zellennummer = self.item['zellennummer']
-    parent.repeating_panel_zellendetails.items = [{'haeftlingsnummer': 'TODO', 'einzug': 'TODO', 'auszug': 'TODO', 'haftdauer': 'TODO'},
-                                                  {'haeftlingsnummer': 'TODO1', 'einzug': 'TODO1', 'auszug': 'TODO1', 'haftdauer': 'TODO1'}]
+    print(zellennummer)
+    hids = anvil.server.call('get_hid', zellennummer)
+    print("hids")
+    print(hids)
+    zellendetails = anvil.server.call('get_häftlinge_data', hids)
+    print("Zellendatails")
+    print(zellendetails)
+    data = []
+    for zellendatail in zellendetails:
+      data.append({'haeftlingsnummer': zellendatail[0], 'einzug': zellendatail[2], 'auszug': zellendatail[3], 'haftdauer': zellendatail[1]})
+    print("Data")
+    print(data)
+    parent.repeating_panel_zellendetails.items = data
